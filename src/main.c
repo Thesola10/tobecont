@@ -1,5 +1,8 @@
 #include "main.h"
 
+char *tbc_wav_pos;
+long  tbc_wav_remain;
+
 unsigned char px_gamma(unsigned char channel, float gamma)
 {
     float chnl_work = (float) channel;
@@ -70,29 +73,33 @@ SDL_Surface *getScreenshot(SDL_DisplayMode DM)
 
 int main(int argc, char *argv[])
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_EVERYTHING);
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
 
     IMG_Init(IMG_INIT_PNG);
 
-    SDL_Surface *shot = getScreenshot(DM);
-    SDL_Surface *arrow = IMG_Load_RW(SDL_RWFromConstMem(arr_png, arr_png_size), 1);
+    SDL_Surface *arrow = IMG_Load_RW(SDL_RWFromConstMem(&arr_png, arr_png_size), 1);
 
     SDL_Rect arrowRect;
     arrowRect.x = 20;
-    arrowRect.y = DM.h - arrow->h - 20;
+    arrowRect.y = DM.h - arrow->h - 20; 
     arrowRect.w = arrow->w;
     arrowRect.h = arrow->h;
 
+    SDL_AudioSpec obtainedSpec;
     SDL_AudioSpec wavSpec;
     wavSpec.freq     = 44100;
     wavSpec.format   = AUDIO_S16;
     wavSpec.channels = 2;
     wavSpec.samples  = 4096;
+    wavSpec.callback = NULL;
 
-    SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
-    SDL_QueueAudio(deviceId, tbc_wav, tbc_wav_size);
+    tbc_wav_pos    = &tbc_wav;
+    tbc_wav_remain = tbc_wav_size;
+
+    SDL_AudioDeviceID deviceId = SDL_OpenAudio(&wavSpec, &obtainedSpec);
+    SDL_QueueAudio(deviceId, &tbc_wav, tbc_wav_size);
 
     SDL_PauseAudioDevice(deviceId, 0);
     
@@ -109,6 +116,8 @@ int main(int argc, char *argv[])
             | SDL_WINDOW_MOUSE_CAPTURE
             | SDL_WINDOW_ALWAYS_ON_TOP
             | SDL_WINDOW_OPENGL);
+
+    SDL_Surface *shot = getScreenshot(DM);
 
     applyGamma(shot, 4, 3, 1);
 

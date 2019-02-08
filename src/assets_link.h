@@ -7,10 +7,10 @@
 #ifndef __ASSETS_LINK_H
 #define __ASSETS_LINK_H
 
-char *arr_png;
-char *tbc_wav;
+extern char arr_png;
+extern char tbc_wav;
 
-unsigned int arr_png_size;
-unsigned int tbc_wav_size;
+extern int arr_png_size;
+extern int tbc_wav_size;
 
 #endif //__ASSETS_LINK_H

@@ -2,7 +2,7 @@
 # License: GNU GPL 3.0
 # File to link assets statically into executable
 
-.section rodata
+.section .data
 .global arr_png
 .type arr_png, @object
 .align 8
