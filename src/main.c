@@ -98,7 +98,8 @@ int main(int argc, char *argv[])
     tbc_wav_pos    = &tbc_wav;
     tbc_wav_remain = tbc_wav_size;
 
-    SDL_AudioDeviceID deviceId = SDL_OpenAudio(&wavSpec, &obtainedSpec);
+    SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, 
+            &wavSpec, &obtainedSpec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
     SDL_QueueAudio(deviceId, &tbc_wav, tbc_wav_size);
 
     SDL_PauseAudioDevice(deviceId, 0);
