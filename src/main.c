@@ -1,8 +1,5 @@
 #include "main.h"
 
-char *tbc_wav_pos;
-long  tbc_wav_remain;
-
 unsigned char px_gamma(unsigned char channel, float gamma)
 {
     float chnl_work = (float) channel;
@@ -71,6 +68,15 @@ SDL_Surface *getScreenshot(SDL_DisplayMode DM)
     return (dest);
 }
 
+void renderDelay(SDL_Window *win, SDL_Renderer *rend, int frames)
+{
+    for (; frames; frames--) {
+        SDL_RenderPresent(rend);
+        SDL_UpdateWindowSurface(win);
+        SDL_Delay(16);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -95,9 +101,6 @@ int main(int argc, char *argv[])
     wavSpec.samples  = 4096;
     wavSpec.callback = NULL;
 
-    tbc_wav_pos    = &tbc_wav;
-    tbc_wav_remain = tbc_wav_size;
-
     SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, 
             &wavSpec, &obtainedSpec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
     SDL_QueueAudio(deviceId, &tbc_wav, tbc_wav_size);
@@ -109,8 +112,7 @@ int main(int argc, char *argv[])
             "ah-buh-bye! :D", 
             SDL_WINDOWPOS_UNDEFINED, 
             SDL_WINDOWPOS_UNDEFINED, 
-            DM.w, 
-            DM.h, 
+            DM.w, DM.h, 
             SDL_WINDOW_FULLSCREEN 
             | SDL_WINDOW_SHOWN 
             | SDL_WINDOW_INPUT_GRABBED 
@@ -128,11 +130,7 @@ int main(int argc, char *argv[])
 
     SDL_RenderCopy(rend, te,  NULL, NULL);
     SDL_RenderCopy(rend, art, NULL, &arrowRect); 
-    SDL_RenderPresent(rend);
-
-    SDL_UpdateWindowSurface(win);
-
-    SDL_Delay(14100);
+    renderDelay(win, rend, 840);
 
     SDL_DestroyWindow(win);
     SDL_FreeSurface(shot);

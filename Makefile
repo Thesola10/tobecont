@@ -5,7 +5,7 @@ CC_FLAGS = $(shell pkgconf --cflags --libs sdl2 SDL2_image x11) -lm -ggdb
 
 OUTPUT   = tobecont
 ASSETS   = assets/arr.png \
-		   assets/tbc.wav
+           assets/tbc.wav
 
 SRC      = $(wildcard src/*.c)
 
