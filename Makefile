@@ -1,10 +1,10 @@
 # Makefile for tobecontinued
 
 CC       = gcc
-CC_FLAGS = $(shell pkgconf --cflags --libs sdl2 SDL2_image x11) -lm -ggdb
+CC_FLAGS = $(shell pkgconf --cflags --libs sdl2 x11) -lm -ggdb
 
 OUTPUT   = tobecont
-ASSETS   = assets/arr.png \
+ASSETS   = assets/arr.bmp \
            assets/tbc.wav
 
 SRC      = $(wildcard src/*.c)

@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
 
-    IMG_Init(IMG_INIT_PNG);
+    //IMG_Init(IMG_INIT_PNG);
 
-    SDL_Surface *arrow = IMG_Load_RW(SDL_RWFromConstMem(&arr_png, arr_png_size), 1);
+    SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(&arr_png, arr_png_size), 1);
 
     SDL_Rect arrowRect;
     arrowRect.x = 20;
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudioDevice(deviceId, 0);
     
-    SDL_Delay(3400);
+    SDL_Delay(3300);
     SDL_Window *win = SDL_CreateWindow(
             "ah-buh-bye! :D", 
             SDL_WINDOWPOS_UNDEFINED, 

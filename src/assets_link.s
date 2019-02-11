@@ -8,7 +8,7 @@
 .align 8
 
 arr_png:
-.incbin "assets/arr.png"
+.incbin "assets/arr.bmp"
 
 .global arr_png_size
 .type arr_png_size, @object
