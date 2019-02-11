@@ -1,7 +1,7 @@
 # Makefile for tobecontinued
 
 CC       = gcc
-CC_FLAGS = $(shell pkgconf --cflags --libs sdl2 x11) -lm -ggdb
+CC_FLAGS = $(shell pkgconf --cflags --libs sdl2 x11) -lm
 
 OUTPUT   = tobecont
 ASSETS   = assets/arr.bmp \
