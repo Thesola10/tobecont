@@ -56,25 +56,23 @@ SDL_Surface *getScreenshot(SDL_DisplayMode DM)
     XGetWindowAttributes(disp, root, &attr);
 
     XImage *img = XGetImage(disp, root, 0, 0, 
-            attr.width, attr.height, AllPlanes, ZPixmap);
+            DM.w, DM.h, AllPlanes, ZPixmap);
 
     int x, y;
     SDL_LockSurface(dest);
-    for (y = 0; y < attr.height; y++)
-        for (x = 0; x < attr.width; x++)
-            ((unsigned *) dest->pixels)[x + y * attr.width] = XGetPixel(img, x, y);
+    for (y = 0; y < DM.h; y++)
+        for (x = 0; x < DM.w; x++)
+            ((unsigned *) dest->pixels)[x + y * DM.w] = XGetPixel(img, x, y);
     SDL_UnlockSurface(dest);
 
     return (dest);
 }
 
-void renderDelay(SDL_Window *win, SDL_Renderer *rend, int frames)
+void renderDelay(SDL_Window *win, SDL_Renderer *rend)
 {
-    for (; frames; frames--) {
-        SDL_RenderPresent(rend);
-        SDL_UpdateWindowSurface(win);
-        SDL_Delay(16);
-    }
+    SDL_RenderPresent(rend);
+    SDL_UpdateWindowSurface(win);
+    SDL_Delay(16);
 }
 
 int main(int argc, char *argv[])
@@ -82,8 +80,6 @@ int main(int argc, char *argv[])
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
-
-    //IMG_Init(IMG_INIT_PNG);
 
     SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(&arr_png, arr_png_size), 1);
 
@@ -124,13 +120,15 @@ int main(int argc, char *argv[])
 
     applyGamma(shot, 4, 3, 1);
 
-    SDL_Renderer *rend = SDL_CreateRenderer(win, -1, 0);
+    SDL_Renderer *rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     SDL_Texture *te  = SDL_CreateTextureFromSurface(rend, shot);
     SDL_Texture *art = SDL_CreateTextureFromSurface(rend, arrow);
 
-    SDL_RenderCopy(rend, te,  NULL, NULL);
-    SDL_RenderCopy(rend, art, NULL, &arrowRect); 
-    renderDelay(win, rend, 840);
+    for (int frames = 860; frames; frames--) {
+        SDL_RenderCopy(rend, te,  NULL, NULL);
+        SDL_RenderCopy(rend, art, NULL, &arrowRect); 
+        renderDelay(win, rend);
+    }
 
     SDL_DestroyWindow(win);
     SDL_FreeSurface(shot);
