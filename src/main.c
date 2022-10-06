@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
 
-    SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(&arr_png, arr_png_size), 1);
+    SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(arr_bmp, arr_bmp_size), 1);
 
     SDL_Rect arrowRect;
     arrowRect.x = 20;
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
     SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, 
             &wavSpec, &obtainedSpec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
-    SDL_QueueAudio(deviceId, &tbc_wav, tbc_wav_size);
+    SDL_QueueAudio(deviceId, tbc_wav, tbc_wav_size);
 
     SDL_PauseAudioDevice(deviceId, 0);
     

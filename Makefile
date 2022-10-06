@@ -1,14 +1,29 @@
 # Makefile for tobecontinued
 
 CC       = gcc
-CC_FLAGS = $(shell pkg-config --cflags --libs sdl2 x11) -lm
+CFLAGS   = $(shell pkg-config --cflags sdl2 x11)
+
+LD       = gcc
+LDFLAGS  = -fPIC
+LDLIBS   = $(shell pkg-config --libs sdl2 x11) -lm
+
+OBJCOPY  = objcopy
+OBJFMT   = elf64-x86-64
 
 OUTPUT   = tobecont
+SOURCES  = src/main.c
 ASSETS   = assets/arr.bmp \
            assets/tbc.wav
 
-SRC      = $(wildcard src/*.c)
+OBJS     = $(patsubst %.c,%.c.o,$(SOURCES))
+ASSETO   = $(patsubst %,%.raw.o,$(ASSETS))
 
-$(OUTPUT): $(SRC) $(ASSETS) src/assets_link.s
-	$(CC) $(CC_FLAGS) src/assets_link.s $(SRC) -o $@
 
+$(OUTPUT): $(OBJS) $(ASSETO)
+	$(LD) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+%.c.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.raw.o: %
+	$(OBJCOPY) -I binary -O $(OBJFMT) $< $@
