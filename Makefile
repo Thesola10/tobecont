@@ -3,11 +3,15 @@ BACKEND := x11
          # one of x11, win32, quartz
 
 CC      := gcc
-CFLAGS  := $(shell pkg-config --cflags sdl2 x11)
+CFLAGS  := $(shell pkg-config --cflags sdl2)
 
 LD      := gcc
 LDFLAGS := -fPIC
-LDLIBS  := $(shell pkg-config --libs sdl2 x11) -lm
+LDLIBS  := $(shell pkg-config --libs sdl2) -lm
+
+ifeq ($(BACKEND),x11)
+  LDLIBS += $(shell pkg-config --libs x11)
+endif
 
 OBJCOPY := objcopy
 OBJFMT  := elf64-x86-64
