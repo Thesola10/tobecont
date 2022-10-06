@@ -1,4 +1,12 @@
+#include <stdbool.h>
 #include "main.h"
+
+static bool quit = false;
+
+unsigned int do_quit(unsigned int tmr, void *unused) {
+    quit = true;
+    return 0;
+}
 
 unsigned char px_gamma(unsigned char channel, float gamma)
 {
@@ -19,9 +27,15 @@ unsigned long getFilteredPixel(unsigned long pixel, float r, float g, float b)
     breakdown[2] = (int)((pixel & 0x000000ff));
 
     // Apply gamma formula
+#if (BACKEND == win32)
+    breakdown[2] = px_gamma(breakdown[2], r);
+    breakdown[1] = px_gamma(breakdown[1], g);
+    breakdown[0] = px_gamma(breakdown[0], b);
+#else
     breakdown[0] = px_gamma(breakdown[0], r);
     breakdown[1] = px_gamma(breakdown[1], g);
     breakdown[2] = px_gamma(breakdown[2], b);
+#endif
 
     // Rebuild the pixel
     pixel  = breakdown[0]; pixel = pixel << 8;
@@ -56,7 +70,8 @@ int main(int argc, char *argv[])
     SDL_GetCurrentDisplayMode(0, &DM);
 
     SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(arr_bmp, arr_bmp_size), 1);
-
+    SDL_Surface *shot = getScreenshot(DM);
+    
     SDL_Rect arrowRect;
     arrowRect.x = 20;
     arrowRect.y = DM.h - arrow->h - 20;
@@ -70,9 +85,10 @@ int main(int argc, char *argv[])
     wavSpec.channels = 2;
     wavSpec.samples  = 4096;
     wavSpec.callback = NULL;
+    wavSpec.userdata = NULL;
 
     SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0,
-            &wavSpec, &obtainedSpec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
+            &wavSpec, &obtainedSpec, 0);
     SDL_QueueAudio(deviceId, tbc_wav, tbc_wav_size);
 
     SDL_PauseAudioDevice(deviceId, 0);
@@ -90,15 +106,15 @@ int main(int argc, char *argv[])
             | SDL_WINDOW_ALWAYS_ON_TOP
             | SDL_WINDOW_OPENGL);
 
-    SDL_Surface *shot = getScreenshot(DM);
-
     applyGamma(shot, 4, 3, 1);
 
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     SDL_Texture *te  = SDL_CreateTextureFromSurface(rend, shot);
     SDL_Texture *art = SDL_CreateTextureFromSurface(rend, arrow);
 
-    for (int frames = 860; frames; frames--) {
+    SDL_AddTimer(9000, &do_quit, NULL);
+
+    while (!quit) {
         SDL_RenderCopy(rend, te,  NULL, NULL);
         SDL_RenderCopy(rend, art, NULL, &arrowRect);
         renderDelay(win, rend);

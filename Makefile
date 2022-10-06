@@ -3,7 +3,7 @@ BACKEND := x11
          # one of x11, win32, quartz
 
 CC      := gcc
-CFLAGS  := $(shell pkg-config --cflags sdl2)
+CFLAGS  := $(shell pkg-config --cflags sdl2) -DBACKEND=$(BACKEND)
 
 LD      := gcc
 LDFLAGS := -fPIC
