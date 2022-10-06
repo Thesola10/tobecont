@@ -36,37 +36,11 @@ void applyGamma(SDL_Surface *surf, float r, float g, float b)
     SDL_LockSurface(surf);
     for (y = 0; y < surf->h; y++)
         for (x = 0; x < surf->w; x++)
-            ((unsigned *) surf->pixels)[x + y * surf->w] 
+            ((unsigned *) surf->pixels)[x + y * surf->w]
                     = getFilteredPixel(((unsigned *)surf->pixels)[x + y * surf->w], r, g, b);
     SDL_UnlockSurface(surf);
 }
 
-SDL_Surface *getScreenshot(SDL_DisplayMode DM)
-{
-    SDL_Surface *dest = SDL_CreateRGBSurface(
-            0, DM.w, DM.h, 32,
-            0x00ff0000,
-            0x0000ff00,
-            0x000000ff, 0);
-
-    Display *disp = XOpenDisplay(NULL);
-    Window root = DefaultRootWindow(disp);
-
-    XWindowAttributes attr = {0};
-    XGetWindowAttributes(disp, root, &attr);
-
-    XImage *img = XGetImage(disp, root, 0, 0, 
-            DM.w, DM.h, AllPlanes, ZPixmap);
-
-    int x, y;
-    SDL_LockSurface(dest);
-    for (y = 0; y < DM.h; y++)
-        for (x = 0; x < DM.w; x++)
-            ((unsigned *) dest->pixels)[x + y * DM.w] = XGetPixel(img, x, y);
-    SDL_UnlockSurface(dest);
-
-    return (dest);
-}
 
 void renderDelay(SDL_Window *win, SDL_Renderer *rend)
 {
@@ -85,7 +59,7 @@ int main(int argc, char *argv[])
 
     SDL_Rect arrowRect;
     arrowRect.x = 20;
-    arrowRect.y = DM.h - arrow->h - 20; 
+    arrowRect.y = DM.h - arrow->h - 20;
     arrowRect.w = arrow->w;
     arrowRect.h = arrow->h;
 
@@ -97,21 +71,21 @@ int main(int argc, char *argv[])
     wavSpec.samples  = 4096;
     wavSpec.callback = NULL;
 
-    SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, 
+    SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0,
             &wavSpec, &obtainedSpec, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE);
     SDL_QueueAudio(deviceId, tbc_wav, tbc_wav_size);
 
     SDL_PauseAudioDevice(deviceId, 0);
-    
+
     SDL_Delay(3300);
     SDL_Window *win = SDL_CreateWindow(
-            "ah-buh-bye! :D", 
-            SDL_WINDOWPOS_UNDEFINED, 
-            SDL_WINDOWPOS_UNDEFINED, 
-            DM.w, DM.h, 
-            SDL_WINDOW_FULLSCREEN 
-            | SDL_WINDOW_SHOWN 
-            | SDL_WINDOW_INPUT_GRABBED 
+            "ah-buh-bye! :D",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            DM.w, DM.h,
+            SDL_WINDOW_FULLSCREEN
+            | SDL_WINDOW_SHOWN
+            | SDL_WINDOW_INPUT_GRABBED
             | SDL_WINDOW_MOUSE_CAPTURE
             | SDL_WINDOW_ALWAYS_ON_TOP
             | SDL_WINDOW_OPENGL);
@@ -126,7 +100,7 @@ int main(int argc, char *argv[])
 
     for (int frames = 860; frames; frames--) {
         SDL_RenderCopy(rend, te,  NULL, NULL);
-        SDL_RenderCopy(rend, art, NULL, &arrowRect); 
+        SDL_RenderCopy(rend, art, NULL, &arrowRect);
         renderDelay(win, rend);
     }
 

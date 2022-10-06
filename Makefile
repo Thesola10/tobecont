@@ -1,17 +1,20 @@
 # Makefile for tobecontinued
+BACKEND := x11
+         # one of x11, win32, quartz
 
-CC       = gcc
-CFLAGS   = $(shell pkg-config --cflags sdl2 x11)
+CC      := gcc
+CFLAGS  := $(shell pkg-config --cflags sdl2 x11)
 
-LD       = gcc
-LDFLAGS  = -fPIC
-LDLIBS   = $(shell pkg-config --libs sdl2 x11) -lm
+LD      := gcc
+LDFLAGS := -fPIC
+LDLIBS  := $(shell pkg-config --libs sdl2 x11) -lm
 
-OBJCOPY  = objcopy
-OBJFMT   = elf64-x86-64
+OBJCOPY := objcopy
+OBJFMT  := elf64-x86-64
 
-OUTPUT   = tobecont
-SOURCES  = src/main.c
+OUTPUT  := tobecont
+SOURCES  = src/main.c \
+		   src/$(BACKEND)/screenshot.c
 ASSETS   = assets/arr.bmp \
            assets/tbc.wav
 
