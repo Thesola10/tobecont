@@ -24,7 +24,7 @@
  *
  * \brief   Offset in pixels from top of screen
  */
-#define ARROW_Y     DM.h - arrow->h + 20
+#define ARROW_Y     DM.h - (arrow->h + 20)
 
 /// \brief Sampling rate, in Hz, for background music.
 #define SOUND_SMPRATE   44100
