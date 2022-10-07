@@ -8,5 +8,10 @@ SDL_Surface *getScreenshot(SDL_DisplayMode DM)
             0x0000ff00,
             0x000000ff, 0);
 
+    CGRect sz = CGRectMake(0, 0, DM.w, DM.h);
+
+    CGImageRef scr = CGDisplayCreateImage(CGMainDisplayID(),
+                                          CGRectMake(0, 0, DM.w, DM.h));
+
     return (dest);
 }
