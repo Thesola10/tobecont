@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "main.h"
+#include "config.h"
 
 static bool quit = false;
 
@@ -56,13 +57,6 @@ void applyGamma(SDL_Surface *surf, float r, float g, float b)
 }
 
 
-void renderDelay(SDL_Window *win, SDL_Renderer *rend)
-{
-    SDL_RenderPresent(rend);
-    SDL_UpdateWindowSurface(win);
-    SDL_Delay(16);
-}
-
 int main(int argc, char *argv[])
 {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -73,17 +67,17 @@ int main(int argc, char *argv[])
     SDL_Surface *shot = getScreenshot(DM);
     
     SDL_Rect arrowRect;
-    arrowRect.x = 20;
-    arrowRect.y = DM.h - arrow->h - 20;
+    arrowRect.x = ARROW_X;
+    arrowRect.y = ARROW_Y;
     arrowRect.w = arrow->w;
     arrowRect.h = arrow->h;
 
     SDL_AudioSpec obtainedSpec;
     SDL_AudioSpec wavSpec;
-    wavSpec.freq     = 44100;
-    wavSpec.format   = AUDIO_S16;
-    wavSpec.channels = 2;
-    wavSpec.samples  = 4096;
+    wavSpec.freq     = SOUND_SMPRATE;
+    wavSpec.format   = SOUND_FORMAT;
+    wavSpec.channels = SOUND_CHANNELS;
+    wavSpec.samples  = SOUND_BUFFER;
     wavSpec.callback = NULL;
     wavSpec.userdata = NULL;
 
@@ -93,7 +87,13 @@ int main(int argc, char *argv[])
 
     SDL_PauseAudioDevice(deviceId, 0);
 
-    SDL_Delay(3300);
+    // Schedule exit by end of song
+    SDL_AddTimer(SOUND_DURATION, &do_quit, NULL);
+
+    // Start freeze-frame a wee bit before drop, opening a new SDL window
+    // takes time!
+    SDL_Delay(SOUND_BUILDUP);
+
     SDL_Window *win = SDL_CreateWindow(
             "ah-buh-bye! :D",
             SDL_WINDOWPOS_UNDEFINED,
@@ -106,18 +106,17 @@ int main(int argc, char *argv[])
             | SDL_WINDOW_ALWAYS_ON_TOP
             | SDL_WINDOW_OPENGL);
 
-    applyGamma(shot, 4, 3, 1);
+    applyGamma(shot, GAMMA_R, GAMMA_G, GAMMA_B);
 
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     SDL_Texture *te  = SDL_CreateTextureFromSurface(rend, shot);
     SDL_Texture *art = SDL_CreateTextureFromSurface(rend, arrow);
 
-    SDL_AddTimer(9000, &do_quit, NULL);
-
     while (!quit) {
         SDL_RenderCopy(rend, te,  NULL, NULL);
         SDL_RenderCopy(rend, art, NULL, &arrowRect);
-        renderDelay(win, rend);
+        SDL_RenderPresent(rend);
+        SDL_UpdateWindowSurface(win);
     }
 
     SDL_DestroyWindow(win);

@@ -22,7 +22,7 @@ pkgsCross.stdenv.mkDerivation {
     [ sdl2Static ];
 
   buildPhase = ''
-    make BACKEND=win32 OUTPUT=tobecont.exe CC=x86_64-w64-mingw32-gcc LD=x86_64-w64-mingw32-gcc OBJCOPY=x86_64-w64-mingw32-objcopy
+    make BACKEND=win32 OUTPUT=tobecont.exe
   '';
   installPhase = ''
     mkdir -p $out

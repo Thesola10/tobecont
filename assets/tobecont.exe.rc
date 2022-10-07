@@ -1,0 +1,23 @@
+id ICON "tobecont.exe.ico"
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "TheSola10"
+      VALUE "FileDescription", "Roundabout!"
+      VALUE "FileVersion", "1.0"
+      VALUE "InternalName", "tbc"
+      VALUE "LegalCopyright", "David Productions (graphics), Yes (music)"
+      VALUE "ProductName", "To Be Continued..."
+      VALUE "ProductVersion", "1.0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
