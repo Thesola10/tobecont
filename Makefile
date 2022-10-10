@@ -40,7 +40,7 @@ re:: all
 
 $(OUTPUT): $(OBJS) $(ASSETO)
 	@mkdir -p $(@D)
-	@$(call rich_echo,"LD","$(OUTPUT)")
+	@$(call rich_echo,"CCLD","$(OUTPUT)")
 	@$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 $(O)/%.c.o: %.c
@@ -50,8 +50,8 @@ $(O)/%.c.o: %.c
 
 $(O)/%.raw.o: %
 	@mkdir -p $(@D)
-	@$(call rich_echo,"OBJCOPY","$@")
-	@$(OBJCOPY) -I binary -O $(OBJFMT) $< $@
+	@$(call rich_echo,"LD","$@")
+	@$(LD) -r -b binary $< -o $@
 
 $(O)/%.res: %.rc
 	@mkdir -p $(@D)
