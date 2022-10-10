@@ -39,6 +39,7 @@ other platforms:
 
  - The usual `CC`, as well as `OBJCOPY` to specify a cross-compiler. You shouldn't
    need to redefine them in cross-compiler toolchains.
+ - Like in the Linux kernel, `O` designates an alternate output directory.
  - `OBJFMT` specifies the target object format to be produced by `objcopy`.
  - `BACKEND` selects a specific method to take a screenshot. Individual backends
    can be found as subdirectories of `src`.
