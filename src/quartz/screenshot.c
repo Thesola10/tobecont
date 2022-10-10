@@ -10,8 +10,16 @@ SDL_Surface *getScreenshot(SDL_DisplayMode DM)
 
     CGRect sz = CGRectMake(0, 0, DM.w, DM.h);
 
-    CGImageRef scr = CGDisplayCreateImage(CGMainDisplayID(),
-                                          CGRectMake(0, 0, DM.w, DM.h));
+    CGImageRef scr = CGWindowListCreateImage(CGRectMake(0, 0, DM.w, DM.h),
+                                             kCGWindowListOptionAll,
+                                             kCGNullWindowID,
+                                             kCGWindowImageBestResolution);
+
+    CGDataProviderRef sdat = CGImageGetDataProvider(scr);
+
+    SDL_LockSurface(dest);
+    dest->pixels = CFDataGetBytePtr(CGDataProviderCopyData(sdat));
+    SDL_UnlockSurface(dest);
 
     return (dest);
 }
