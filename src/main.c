@@ -28,15 +28,9 @@ unsigned long getFilteredPixel(unsigned long pixel, float r, float g, float b)
     breakdown[2] = (int)((pixel & 0x000000ff));
 
     // Apply gamma formula
-#if (BACKEND == win32)
-    breakdown[2] = px_gamma(breakdown[2], r);
-    breakdown[1] = px_gamma(breakdown[1], g);
-    breakdown[0] = px_gamma(breakdown[0], b);
-#else
     breakdown[0] = px_gamma(breakdown[0], r);
     breakdown[1] = px_gamma(breakdown[1], g);
     breakdown[2] = px_gamma(breakdown[2], b);
-#endif
 
     // Rebuild the pixel
     pixel  = breakdown[0]; pixel = pixel << 8;
@@ -64,7 +58,6 @@ int main(int argc, char *argv[])
     SDL_GetCurrentDisplayMode(0, &DM);
 
     SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(arr_bmp, arr_bmp_size), 1);
-    SDL_Surface *shot = getScreenshot(DM);
     
     SDL_Rect arrowRect;
     arrowRect.x = ARROW_X;
@@ -106,6 +99,7 @@ int main(int argc, char *argv[])
             | SDL_WINDOW_ALWAYS_ON_TOP
             | SDL_WINDOW_OPENGL);
 
+    SDL_Surface *shot = getScreenshot(DM);
     applyGamma(shot, GAMMA_R, GAMMA_G, GAMMA_B);
 
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);

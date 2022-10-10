@@ -6,18 +6,18 @@
  * \brief   Symbols from assets linker
  */
 
-///\brief Start of assets/arr.bmp as exported by objcopy
+/// \brief Start of assets/arr.bmp as exported by objcopy
 extern const char _binary_assets_arr_bmp_start;
-///\brief End of assets/arr.bmp as exported by objcopy
+/// \brief End of assets/arr.bmp as exported by objcopy
 extern const char _binary_assets_tbc_wav_start;
-///\brief Start of assets/tbc.wav as exported by objcopy
+/// \brief Start of assets/tbc.wav as exported by objcopy
 extern const char _binary_assets_arr_bmp_end;
-///\brief End of assets/tbc.wav as exported by objcopy
+/// \brief End of assets/tbc.wav as exported by objcopy
 extern const char _binary_assets_tbc_wav_end;
 
-///\brief Exported pointer to start of assets/arr.bmp
+/// \brief Exported pointer to start of assets/arr.bmp
 static const char *arr_bmp = &_binary_assets_arr_bmp_start;
-///\brief Exported pointer to start of assets/tbc.wav
+/// \brief Exported pointer to start of assets/tbc.wav
 static const char *tbc_wav = &_binary_assets_tbc_wav_start;
 
 /**
