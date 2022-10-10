@@ -11,12 +11,6 @@ ifeq ($(BACKEND),x11)
   LDLIBS += $(shell pkg-config --libs x11)
 endif
 
-ifndef OBJCOPY
-OBJCOPY := objcopy
-endif
-
-OBJFMT  := elf64-x86-64
-
 O       := .
 OUTPUT  := $(O)/tobecont
 SOURCES  = src/main.c \

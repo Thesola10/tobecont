@@ -31,16 +31,12 @@ On build machine, `gcc` and `objcopy` are also required.
  
 ## Build:
 
-Building does not yet work on Windows due to issues with `objcopy` linking.
-However, cross-compiling from Linux to Windows does work.
-
 The provided Makefile supports a couple extra options which should help target
 other platforms:
 
- - The usual `CC`, as well as `OBJCOPY` to specify a cross-compiler. You shouldn't
-   need to redefine them in cross-compiler toolchains.
+ - The usual `CC` and `LD` to specify a cross-compiler. You shouldn't need to redefine
+   them.
  - Like in the Linux kernel, `O` designates an alternate output directory.
- - `OBJFMT` specifies the target object format to be produced by `objcopy`.
  - `BACKEND` selects a specific method to take a screenshot. Individual backends
    can be found as subdirectories of `src`.
 
