@@ -28,7 +28,7 @@ OBJS     = $(patsubst %.c,$(O)/%.c.o,$(SOURCES))
 ASSETO   = $(patsubst %,$(O)/%.raw.o,$(ASSETS))
 
 ifeq ($(BACKEND),win32)
-  OBJS += assets/tobecont.exe.res
+  OBJS += $(O)/assets/tobecont.exe.res
 endif
 
 ## Build tobecont binary
