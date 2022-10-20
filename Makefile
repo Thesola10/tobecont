@@ -44,8 +44,13 @@ $(O)/%.c.o: %.c
 
 $(O)/%.raw.o: %
 	@mkdir -p $(@D)
+ifeq ($(findstring GNU ld, $(shell $(LD) --version)), GNU ld)
 	@$(call rich_echo,"LD","$@")
 	@$(LD) -r -b binary $< -o $@
+else
+	@$(call rich_echo,"OBJCOPY","$@")
+	@$(OBJCOPY) -I binary -O mach-o-x86-64 $< $@
+endif
 
 $(O)/%.res: %.rc
 	@mkdir -p $(@D)
