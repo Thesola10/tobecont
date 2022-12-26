@@ -9,6 +9,9 @@ LDLIBS  := $(shell pkg-config --libs sdl2) -lm
 
 ifeq ($(BACKEND),x11)
   LDLIBS += $(shell pkg-config --libs x11)
+else ifeq ($(BACKEND),quartz)
+  CFLAGS += -iframework CoreGraphics -iframework CoreFoundation
+  LDLIBS += -framework CoreGraphics -framework CoreFoundation
 endif
 
 O       := .
@@ -32,7 +35,7 @@ all: $(OUTPUT)
 re:: fclean
 re:: all
 
-$(OUTPUT): $(OBJS) $(ASSETO)
+$(OUTPUT): $(ASSETO) $(OBJS)
 	@mkdir -p $(@D)
 	@$(call rich_echo,"CCLD","$(OUTPUT)")
 	@$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
@@ -49,7 +52,7 @@ ifeq ($(findstring GNU ld, $(shell $(LD) --version)), GNU ld)
 	@$(LD) -r -b binary $< -o $@
 else
 	@$(call rich_echo,"OBJCOPY","$@")
-	@$(OBJCOPY) -I binary -O mach-o-x86-64 $< $@
+	@echo -e '.data\n__binary_$(subst /,_,$(subst .,_,$<))_start:\n.incbin "$^"\n__binary_$(subst /,_,$(subst .,_,$<))_end:' | $(AS) -o $@
 endif
 
 $(O)/%.res: %.rc
