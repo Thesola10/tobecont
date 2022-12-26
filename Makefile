@@ -52,7 +52,8 @@ ifeq ($(findstring GNU ld, $(shell $(LD) --version)), GNU ld)
 	@$(LD) -r -b binary $< -o $@
 else
 	@$(call rich_echo,"OBJCOPY","$@")
-	@echo -e '.data\n__binary_$(subst /,_,$(subst .,_,$<))_start:\n.incbin "$^"\n__binary_$(subst /,_,$(subst .,_,$<))_end:' | $(AS) -o $@
+	@$(eval FILESYM = $(subst /,_,$(subst .,_,$<)))
+	@echo -e '.data\n.globl __binary_$(FILESYM)_start\n.globl __binary_$(FILESYM)_end\n__binary_$(FILESYM)_start:\n.incbin "$^"\n__binary_$(FILESYM)_end:' | $(AS) -o $@
 endif
 
 $(O)/%.res: %.rc
