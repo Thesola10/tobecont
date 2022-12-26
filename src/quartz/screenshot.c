@@ -8,18 +8,22 @@ SDL_Surface *getScreenshot(SDL_DisplayMode DM)
             0x0000ff00,
             0x000000ff, 0);
 
+    CGDisplayCount dispCount;
+    CGDirectDisplayID disp;
+
+    CGGetActiveDisplayList(1, &disp, &dispCount);
+
     CGRect sz = CGRectMake(0, 0, DM.w, DM.h);
 
-    CGImageRef scr = CGWindowListCreateImage(CGRectMake(0, 0, DM.w, DM.h),
-                                             kCGWindowListOptionAll,
-                                             kCGNullWindowID,
-                                             kCGWindowImageBestResolution);
+    CGImageRef scr = CGDisplayCreateImage(disp);
 
-    CGDataProviderRef sdat = CGImageGetDataProvider(scr);
+    CFDataRef sdat = CGDataProviderCopyData(CGImageGetDataProvider(scr));
 
     SDL_LockSurface(dest);
-    dest->pixels = CFDataGetBytePtr(CGDataProviderCopyData(sdat));
+    CFDataGetBytes(sdat, CFRangeMake(0, CFDataGetLength(sdat)), dest->pixels);
     SDL_UnlockSurface(dest);
+
+    CGImageRelease(scr);
 
     return (dest);
 }
