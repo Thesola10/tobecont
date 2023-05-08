@@ -10,7 +10,7 @@
 
 /**
  * Expression that returns a value, in pixels, describing the X-coordinate
- * of the top-left corner of the arrow. Use <code>DM.w</code> for the display
+ * of the top-left corner of the arrow. Use <code>aw</code> for the display
  * area width, and <code>arrow->w</code> for the arrow's own width.
  *
  * \brief   Offset in pixels from left of screen
@@ -19,12 +19,12 @@
 
 /**
  * Expression that returns a value, in pixels, describing the Y-coordinate
- * of the top-left corner of the arrow. Use <code>DM.h</code> for the display
+ * of the top-left corner of the arrow. Use <code>ah</code> for the display
  * area height, and <code>arrow->h</code> for the arrow's own height.
  *
  * \brief   Offset in pixels from top of screen
  */
-#define ARROW_Y     DM.h - (arrow->h + 20)
+#define ARROW_Y     ah - (arrow->h + 20)
 
 /// \brief Sampling rate, in Hz, for background music.
 #define SOUND_SMPRATE   44100

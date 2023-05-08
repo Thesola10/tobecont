@@ -60,10 +60,6 @@ int main(int argc, char *argv[])
     SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(arr_bmp, arr_bmp_size), 1);
     
     SDL_Rect arrowRect;
-    arrowRect.x = ARROW_X;
-    arrowRect.y = ARROW_Y;
-    arrowRect.w = arrow->w;
-    arrowRect.h = arrow->h;
 
     SDL_AudioSpec obtainedSpec;
     SDL_AudioSpec wavSpec;
@@ -102,6 +98,11 @@ int main(int argc, char *argv[])
 
     int aw = 0, ah = 0;
     SDL_GL_GetDrawableSize(win, &aw, &ah);
+
+    arrowRect.x = ARROW_X;
+    arrowRect.y = ARROW_Y;
+    arrowRect.w = arrow->w;
+    arrowRect.h = arrow->h;
 
     SDL_Surface *shot = getScreenshot(aw, ah);
     applyGamma(shot, GAMMA_R, GAMMA_G, GAMMA_B);

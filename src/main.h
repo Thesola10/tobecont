@@ -15,8 +15,10 @@
  * the provided DisplayMode.
  *
  * \brief   Obtain screenshot as SDL surface
- * \param DM    The DisplayMode object containing the expected dimensions for
- *              the screenshot surface.
+ * \param aw    The width, in pixels, of the expected screenshot surface.
+ *              This value represents physical pixels on HiDPI systems.
+ * \param ah    The height, in pixels, of the expected screenshot surface.
+ *              This value represents physical pixels on HiDPI systems.
  * \return  An SDL surface containing a screenshot for the whole screen.
  */
 SDL_Surface *getScreenshot(int aw, int ah);
