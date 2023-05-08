@@ -97,16 +97,22 @@ int main(int argc, char *argv[])
             | SDL_WINDOW_INPUT_GRABBED
             | SDL_WINDOW_MOUSE_CAPTURE
             | SDL_WINDOW_ALWAYS_ON_TOP
+            | SDL_WINDOW_ALLOW_HIGHDPI
             | SDL_WINDOW_OPENGL);
 
-    SDL_Surface *shot = getScreenshot(DM);
+    int aw = 0, ah = 0;
+    SDL_GL_GetDrawableSize(win, &aw, &ah);
+
+    SDL_Surface *shot = getScreenshot(aw, ah);
     applyGamma(shot, GAMMA_R, GAMMA_G, GAMMA_B);
 
+    SDL_GLContext *gc = SDL_GL_CreateContext(win);
     SDL_Renderer *rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     SDL_Texture *te  = SDL_CreateTextureFromSurface(rend, shot);
     SDL_Texture *art = SDL_CreateTextureFromSurface(rend, arrow);
 
     while (!quit) {
+        SDL_PumpEvents();
         SDL_RenderCopy(rend, te,  NULL, NULL);
         SDL_RenderCopy(rend, art, NULL, &arrowRect);
         SDL_RenderPresent(rend);
@@ -117,6 +123,7 @@ int main(int argc, char *argv[])
     SDL_FreeSurface(shot);
     SDL_DestroyTexture(te);
     SDL_DestroyRenderer(rend);
+    SDL_GL_DeleteContext(gc);
     SDL_CloseAudioDevice(deviceId);
     SDL_Quit();
     return 0;

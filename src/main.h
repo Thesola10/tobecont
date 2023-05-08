@@ -19,7 +19,7 @@
  *              the screenshot surface.
  * \return  An SDL surface containing a screenshot for the whole screen.
  */
-SDL_Surface *getScreenshot(SDL_DisplayMode DM);
+SDL_Surface *getScreenshot(int aw, int ah);
 
 #endif //__MAIN_H
 
