@@ -50,6 +50,7 @@ void applyGamma(SDL_Surface *surf, float r, float g, float b)
     SDL_UnlockSurface(surf);
 }
 
+extern int SDL_QueueAudio(SDL_AudioDeviceID, const void *, Uint32);
 
 int main(int argc, char *argv[])
 {
@@ -58,7 +59,7 @@ int main(int argc, char *argv[])
     SDL_GetCurrentDisplayMode(0, &DM);
 
     SDL_Surface *arrow = SDL_LoadBMP_RW(SDL_RWFromConstMem(arr_bmp, arr_bmp_size), 1);
-    
+
     SDL_Rect arrowRect;
 
     SDL_AudioSpec obtainedSpec;
@@ -91,13 +92,20 @@ int main(int argc, char *argv[])
             SDL_WINDOW_FULLSCREEN
             | SDL_WINDOW_SHOWN
             | SDL_WINDOW_INPUT_GRABBED
+#if (BACKEND != wasm)
             | SDL_WINDOW_MOUSE_CAPTURE
             | SDL_WINDOW_ALWAYS_ON_TOP
             | SDL_WINDOW_ALLOW_HIGHDPI
+#endif
             | SDL_WINDOW_OPENGL);
 
     int aw = 0, ah = 0;
+#if (BACKEND == wasm)
+    aw = DM.w;
+    ah = DM.h;
+#else
     SDL_GL_GetDrawableSize(win, &aw, &ah);
+#endif
 
     arrowRect.x = ARROW_X;
     arrowRect.y = ARROW_Y;
