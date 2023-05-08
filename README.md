@@ -48,10 +48,8 @@ Building the executable on Windows has only been tested on [MSys2](https://msys2
 
 The `x11` backend can be made to work, but `libX11` is not available on the MSys2 repositories, and an X server like `vcXsrv` is required on the target machine.
 
-If you have `nix` installed (or use [`nix-portable`](https://github.com/DavHau/nix-portable)),
-you can use the provided `win.nix` file to cross-compile to Windows. The
-generated `SDL2.dll` file will need to be provided alongside the executable
-in order for it to work.
+If you are running on macOS or Linux, you can run `./nix build .#forWindows` to cross-compile the Windows executable.
+The generated `SDL2.dll` file will need to be provided alongside the executable in order for it to work.
 
 </details>
 

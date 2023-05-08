@@ -21,6 +21,10 @@ pkgs.stdenv.mkDerivation {
     [ SDL2 ];
 
   buildPhase = ''
+    ${ if backend == "quartz" then
+    ''
+      export CC="$CC -F${pkgs.darwin.apple_sdk.frameworks.CoreGraphics}/Library/Frameworks"
+    '' else ""}
     make BACKEND=${backend}
   '';
 
