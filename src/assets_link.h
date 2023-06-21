@@ -23,7 +23,7 @@ static const char *tbc_wav = &_binary_assets_tbc_wav_start;
 /**
  * We cannot use objcopy's <code>_binary_assets_arr_bmp_size</code> since it is
  * declared as an absolute symbol, which conflicts with PIC linking. As such,
- * we instead computer the size from the start and end pointers.
+ * we instead compute the size from the start and end pointers.
  *
  * \brief Computed expression for length of assets/arr.bmp
  */

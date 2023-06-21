@@ -32,10 +32,7 @@ SDL_Surface *getScreenshot(SDL_DisplayMode DM)
             0x0000ff00,
             0x000000ff, 0);
 
-    //TODO: Perform screenshot acquisition
-
     SDL_LockSurface(dest);
-    //TODO: Perform screenshot copy into dest->pixels
     getMediaOneFrame(dest->pixels);
     SDL_UnlockSurface(dest);
 
