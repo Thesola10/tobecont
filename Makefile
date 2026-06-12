@@ -1,11 +1,15 @@
 # Makefile for tobecontinued
 BACKEND := x11
-         # one of x11, win32, quartz
+         # one of x11, win32, quartz, wasm
 
 CFLAGS  := $(shell pkg-config --cflags sdl2) -DBACKEND=$(BACKEND)
 
 LDFLAGS := -fPIC
-LDLIBS  := $(shell pkg-config --libs sdl2) -lm
+ifeq ($(BACKEND),wasm)
+  LDLIBS := -sUSE_SDL=2
+else
+  LDLIBS := $(shell pkg-config --libs sdl2) -lm
+endif
 
 ifeq ($(BACKEND),x11)
   LDLIBS += $(shell pkg-config --libs x11)
@@ -22,7 +26,12 @@ ASSETS   = assets/arr.bmp \
            assets/tbc.wav
 
 OBJS     = $(patsubst %.c,$(O)/%.c.o,$(SOURCES))
-ASSETO   = $(patsubst %,$(O)/%.raw.o,$(ASSETS))
+ifeq ($(BACKEND),wasm)
+  # WebAssembly version does not embed asset files
+  ASSETO = $(patsubst %,$(O)/%,$(ASSETS))
+else
+  ASSETO = $(patsubst %,$(O)/%.raw.o,$(ASSETS))
+endif
 
 ifeq ($(BACKEND),win32)
   OBJS += $(O)/assets/tobecont.exe.res
@@ -38,7 +47,11 @@ re:: all
 $(OUTPUT): $(OBJS) $(ASSETO)
 	@mkdir -p $(@D)
 	@$(call rich_echo,"CCLD","$(OUTPUT)")
+ifeq ($(BACKEND),wasm)
+	@$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LDLIBS)
+else
 	@$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+endif
 
 $(O)/%.c.o: %.c
 	@mkdir -p $(@D)
@@ -60,6 +73,11 @@ $(O)/%.res: %.rc
 	@mkdir -p $(@D)
 	@$(call rich_echo,"WINDRES","$@")
 	@$(WINDRES) $< -O coff -o $@
+
+$(O)/%: %
+	@mkdir -p $(@D)
+	@$(call rich_echo,"INSTALL","$@")
+	@cp $< $@
 
 
 ## Remove generated files

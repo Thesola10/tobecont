@@ -1,5 +1,5 @@
-#ifndef __ASSETS_LINK_H
-#define __ASSETS_LINK_H
+#ifndef __ASSETS_H
+#define __ASSETS_H
 
 /**
  * \file    assets_link.h
@@ -39,7 +39,6 @@ static const char *tbc_wav = &_binary_assets_tbc_wav_start;
 #define tbc_wav_size  \
     (&_binary_assets_tbc_wav_end - &_binary_assets_tbc_wav_start)
 
-
-#endif //__ASSETS_LINK_H
+#endif //__ASSETS_H
 
 // vim: ft=c.doxygen

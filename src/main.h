@@ -7,7 +7,12 @@
  */
 
 #include <SDL.h>
+
+#if (BACKEND == wasm)
+#include "wasm/assets_load.h"
+#else
 #include "assets_link.h"
+#endif
 
 /**
  * This function should be defined in a subdirectory of <code>src</code>

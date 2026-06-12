@@ -46,6 +46,16 @@
 /// \brief Floating-point value for screenshot's blue channel gamma
 #define GAMMA_B     1
 
+/**
+ * The WebAssembly build does not support embedding its assets into the
+ * executable, instead relying on the host browser to download them. This
+ * string will be prefixed to the <b>file name</b> of the asset being
+ * retrieved.
+ *
+ * \brief Prefix to the assets URL for the WASM version
+ */
+#define WASM_URL_PREFIX "assets/"
+
 #endif //__CONFIG_H
 
 // vim: ft=c.doxygen
