@@ -35,7 +35,7 @@ all: $(OUTPUT)
 re:: fclean
 re:: all
 
-$(OUTPUT): $(ASSETO) $(OBJS)
+$(OUTPUT): $(OBJS) $(ASSETO)
 	@mkdir -p $(@D)
 	@$(call rich_echo,"CCLD","$(OUTPUT)")
 	@$(CC) $(LDFLAGS) $^ -o $@ $(LDLIBS)

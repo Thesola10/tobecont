@@ -24,10 +24,10 @@ EM_JS(void, getMediaOneFrame, (char *tgt), {
     return mybuf;
 });
 
-SDL_Surface *getScreenshot(SDL_DisplayMode DM)
+SDL_Surface *getScreenshot(int aw, int ah)
 {
     SDL_Surface *dest = SDL_CreateRGBSurface(
-            0, DM.w, DM.h, 32,
+            0, aw, ah, 32,
             0x00ff0000,
             0x0000ff00,
             0x000000ff, 0);
